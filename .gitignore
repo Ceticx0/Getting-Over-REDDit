@@ -1,0 +1,9 @@
+creds/
+.pytest_cache
+venv
+shelve/
+media/audio_tracks
+media/comments
+media/createdVideos
+media/post.png
+media/subclip.mp4
