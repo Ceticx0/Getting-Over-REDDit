@@ -39,12 +39,3 @@ def create_video(comments: list, input_video: str = "media/subclip.mp4", output:
     final = CompositeVideoClip(final_clips)
     audio_final = final.set_audio(CompositeAudioClip(audio_clips)).set_end(end_time)
     audio_final.write_videofile(output)
-
-
-if __name__ == '__main__':
-    print("main executed")
-    get_sub_video("D:/obs-videos/bgfootage.mp4")
-    create_video(
-        [("media/post.png", 4.358821, "media/audio.mp3"), ("media/comments/comment0.png", 3, "media/audio2.mp3"), ("media/comments/comment1.png", 5, "media/audio3.mp3")],
-        output="testOutputVideo.mp4"
-    )

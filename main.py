@@ -9,13 +9,21 @@ import shelve
 import ffmpeg
 import re
 import os
+import json
 
 regex = r"[^a-zA-Z0-9 .]"
 pending_uploads = []
+
 if __name__ == '__main__':
+    with open("options.json", 'r') as options_file:
+        options_json = json.load(options_file)
+        background_footage_directory = options_json['background_footage_directory']
+        subreddit = options_json['subreddit']
+        time = options_json['time']
+        video_count = options_json['video_count']
     # get the top posts of x sub for x time
-    posts = request("AskReddit", limit="1",  # TODO: Number of videos, sub, and time from command line argument
-                    time="month")  # 6 videos is about youtube quota limit TODO: can easily request more
+    posts = request(subreddit, limit=video_count,  # TODO: Number of videos, sub, and time from command line argument
+                    time=time)  # 6 videos is about youtube quota limit TODO: can easily request more
     print("Posts grabbed")
     with sync_playwright() as playwright_instance:
         for post_index, post in enumerate(posts):
@@ -60,7 +68,7 @@ if __name__ == '__main__':
                 # last comment to keep it on screen, then show second comment below the top one
             print(f"--- all {len(responses)} comments finished ---")
             video_file_name = re.sub(regex, '', post.post_title[:15])
-            get_sub_video(r"D:\obs-videos\bgfootage.mp4", input_video_length=566)  # vid length in seconds
+            get_sub_video(background_footage_directory, input_video_length=566)  # vid length in seconds
             video_path = "media/createdVideos/{}.mp4".format(video_file_name)
             create_video(video_images, "media/subclip.mp4", video_path,
                          end_time=current_vid_length + 1)
